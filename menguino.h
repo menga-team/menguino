@@ -78,3 +78,20 @@ public:
     }
     byte get() {return _status;}
 };
+
+class MengaClock {
+private:
+    int _interval;
+    unsigned long _last_tick = 0;
+public:
+    MengaClock(int interval = 500) {
+        _interval = interval;
+    }
+    bool tick() {
+        if (millis() > _last_tick + _interval) {
+            _last_tick = millis();
+            return true;
+        }
+        return false;
+    }
+};
