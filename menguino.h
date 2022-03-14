@@ -1,7 +1,9 @@
 #include <Arduino.h>
 
+// datatypes
 using byte = unsigned char;
 
+// macros
 int power(int x, unsigned int p) {
     if (p == 0) return 1;
     if (p == 1) return x;
@@ -21,6 +23,11 @@ int power(int x, unsigned int p) {
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
 #define print(message) Serial.println(message)
 
+// Apparently Arduino needs this function to run properly.
+// it is defined here, so you don't have to put it in your code.
+// if you need it though, just overwrite ours.
+void setup() {Serial.begin(9600);}
+
 class MengaLED {
 private:
     byte _pin;
@@ -30,8 +37,8 @@ public:
     MengaLED(byte pin, byte initial_value = 0) {
         _pin = pin;
         _value = initial_value;
+        pm(_pin, OUTPUT);
     }
-    void setup() {pm(_pin, OUTPUT);}
     void on() {_value = 1; write();}
     void off() {_value = 0; write();}
     void set(byte value) {_value = value; write();}
@@ -43,40 +50,44 @@ public:
 class MengaButton {
 private:
     byte _pin;
-    byte _debounce;
+    int _debounce;
     bool _toggle;
     byte _status = 0;
     byte _last_value = 0;
     unsigned long _last_millis = 0;
+    bool _debounce_update(byte value) {
+        if (_toggle) {
+            if (_last_value == 0 && value == 1) {
+                _status = !_status;
+                return true;
+            }
+            return false;
+        }
+        else {
+            _status = value;
+            return true;
+        }
+    }
 public:
-    MengaButton(byte pin, bool toggle = false, byte debounce_milliseconds = 10) {
+    MengaButton(byte pin, bool toggle = false, int debounce_milliseconds = 10) {
         _pin = pin;
         _debounce = debounce_milliseconds;
         _toggle = toggle;
+        pm(_pin, INPUT);
     }
-    void setup() {pm(_pin, INPUT);}
     bool update() {
-        bool toggled = false;
+        bool triggered = false;
         byte value = dr(_pin);
-        if (value != _last_value) {
-            if (millis() > _last_millis + _debounce) {
-                if (_toggle) {
-                    if (_last_value == 0 && value == 1) {
-                        _status = !_status;
-                        toggled = true;
-                    }
-                }
-                else {
-                    _status = value;
-                    toggled = true;
-                }
+        if (value != _last_value) { // change since last update, but may be contact bounce
+            if (millis() > _last_millis + _debounce) { // debounce_milliseconds have passed, it's not contact bounce
                 _last_millis = millis();
-                _last_value = value;
+                triggered =  _debounce_update(value);
             }
+            else Serial.println("unwanted");
+            _last_value = value;
         }
-        return toggled;
+        return triggered;
     }
-    byte get() {return _status;}
 };
 
 class MengaClock {
