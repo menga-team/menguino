@@ -2,6 +2,14 @@
 An general purpose Arduino Framework Library, worse than the competition,
 but the Classes all start with "Menga" so that's pretty cool.
 
+## Installation
+To include the library into PlatformIO, you can simply add the following line to your `platformio.ini`.
+```
+lib_deps = 
+    https://github.com/menga-team/menguino.git
+```
+To test if everything works, you can try one of the examples located in the [examples folder](examples/).
+
 ## Components
 Aside from various macros for I/O, menguino provides Classes to make it easier
 for you to communicate with components in your circuit:
