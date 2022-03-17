@@ -10,7 +10,14 @@ int power(int x, unsigned int p) {
     int tmp = power(x, p/2);
     if (p%2 == 0) return tmp * tmp;
     else return x * tmp * tmp;}
-#define ar_res 12 // analogReadResolution; 12 for STM32, 10 for Arduino Uno; TODO: determine this automatically
+
+// stm32 or arduino?
+#if defined(ARDUINO_ARCH_STM32F0)
+#define ar_res 12
+#else
+#define ar_res 10
+#endif
+
 #define dw digitalWrite
 #define dr digitalRead
 #define aw analogWrite
@@ -23,20 +30,26 @@ int power(int x, unsigned int p) {
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
 #define print(message) Serial.println(message)
 
+// TODO: this is bullshit
 // Apparently Arduino needs this function to run properly.
 // it is defined here, so you don't have to put it in your code.
 // if you need it though, just overwrite ours.
-void setup() {Serial.begin(9600);}
+//void setup() {Serial.begin(9600);}
 
 class MengaLED {
 private:
     byte _pin;
     byte _value;
-    void write() {dw(_pin, _value);}
+    bool _high_side;
+    void write() {
+        if (_high_side) dw(_pin, _value);
+        else dw(_pin, !_value);
+    }
 public:
-    MengaLED(byte pin, byte initial_value = 0) {
+    MengaLED(byte pin, byte initial_value = 0, bool high_side = true) {
         _pin = pin;
         _value = initial_value;
+        _high_side = high_side;
         pm(_pin, OUTPUT);
     }
     void on() {_value = 1; write();}
@@ -45,6 +58,7 @@ public:
     void toggle() {_value = !_value; write();}
     void pwm_pin(byte input_pin) {menga_pwm(input_pin, _pin);}
     void pwm_value(byte input_value) {aw(_pin, input_value);}
+    byte get() {return _value;}
 };
 
 class MengaButton {
@@ -52,27 +66,31 @@ private:
     byte _pin;
     int _debounce;
     bool _toggle;
+    bool _on;
     byte _status = 0;
     byte _last_value = 0;
     unsigned long _last_millis = 0;
     bool _debounce_update(byte value) {
         if (_toggle) {
-            if (_last_value == 0 && value == 1) {
+            if (_last_value == !_on && value == _on) {
                 _status = !_status;
                 return true;
             }
             return false;
         }
         else {
-            _status = value;
+            if (_high_side) _status = value;
+            else _status = !value;
             return true;
         }
     }
 public:
-    MengaButton(byte pin, bool toggle = false, int debounce_milliseconds = 10) {
+    MengaButton(byte pin, bool toggle = false, int debounce_milliseconds = 10, bool high_side) {
         _pin = pin;
         _debounce = debounce_milliseconds;
         _toggle = toggle;
+        _on = high_side;
+        _status = _off;
         pm(_pin, INPUT);
     }
     bool update() {
@@ -88,6 +106,7 @@ public:
         }
         return triggered;
     }
+    byte get() {return _status;}
 };
 
 class MengaClock {
@@ -105,4 +124,6 @@ public:
         }
         return false;
     }
+    void set(int interval) {_interval = interval}
+    void restart() {_last_tick = millis()}
 };

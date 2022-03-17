@@ -1,6 +1,6 @@
 # menguino
 An general purpose Arduino Framework Library, worse than the competition,
-but the Classes all start with "Menga" so that's pretty cool.
+but all the Classes start with "Menga" so that's pretty cool.
 
 ## Installation
 To include the library into PlatformIO, you can simply add the following line to your `platformio.ini`.
