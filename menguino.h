@@ -79,18 +79,18 @@ private:
             return false;
         }
         else {
-            if (_high_side) _status = value;
+            if (_on) _status = value;
             else _status = !value;
             return true;
         }
     }
 public:
-    MengaButton(byte pin, bool toggle = false, int debounce_milliseconds = 10, bool high_side) {
+    MengaButton(byte pin, bool toggle = false, int debounce_milliseconds = 10, bool high_side = true) {
         _pin = pin;
         _debounce = debounce_milliseconds;
         _toggle = toggle;
         _on = high_side;
-        _status = _off;
+        _status = !_on;
         pm(_pin, INPUT);
     }
     bool update() {
@@ -124,6 +124,6 @@ public:
         }
         return false;
     }
-    void set(int interval) {_interval = interval}
-    void restart() {_last_tick = millis()}
+    void set(int interval) {_interval = interval;}
+    void restart() {_last_tick = millis();}
 };
