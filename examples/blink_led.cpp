@@ -3,6 +3,8 @@
 MengaLED led(PB3);
 MengaClock clock(500);
 
+void setup() {}
+
 void loop() {
     if (clock.tick()) blink.toggle();
 }

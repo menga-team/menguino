@@ -3,7 +3,7 @@
 // datatypes
 using byte = unsigned char;
 
-// macros
+// cool power function
 int power(int x, unsigned int p) {
     if (p == 0) return 1;
     if (p == 1) return x;
@@ -18,6 +18,7 @@ int power(int x, unsigned int p) {
 #define ar_res 10
 #endif
 
+// macros
 #define dw digitalWrite
 #define dr digitalRead
 #define aw analogWrite
@@ -29,12 +30,6 @@ int power(int x, unsigned int p) {
 #define menga_pwm(in, out) aw(out, menga_pinmap(in, 0, 255))
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
 #define print(message) Serial.println(message)
-
-// TODO: this is bullshit
-// Apparently Arduino needs this function to run properly.
-// it is defined here, so you don't have to put it in your code.
-// if you need it though, just overwrite ours.
-//void setup() {Serial.begin(9600);}
 
 class MengaLED {
 private:

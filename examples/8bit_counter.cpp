@@ -11,6 +11,8 @@ byte led_value(byte ledindex, byte value) {
 byte value = 0;
 int millis_counter = 0;
 
+void setup() {}
+
 void loop() {
     if (clock.tick()) {
         value++;
