@@ -1,8 +1,8 @@
-#include "/Users/emil/code/menga/menguino/menguino.h"
+#include "menguino.h"
 
 MengaClock clock;
 int length = 8;
-MengaLED leds[] = {PB3, PB4, PB5, PB6, PB8, PA2, PB0, PB1};
+MengaLED leds[8] = {PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB&, PB8};
 
 byte led_value(byte ledindex, byte value) {
     return ((value >> ledindex) & 1);
