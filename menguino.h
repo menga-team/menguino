@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 // datatypes
-using byte = unsigned char;
+using byte = uint_t;
 
 // cool power function
 int power(int x, unsigned int p) {
@@ -126,4 +126,23 @@ public:
     void stop() {_run = false;}
     void resume() {_run = true;}
     void restart() {_last_tick = millis();}
+};
+
+class MengaBuzzer {
+private:
+    MengaClock _clock;
+    MengaLED _buzzer;
+public:
+    MengaBuzzer(byte pin, byte initial_value = 0, int frequency = 440) {
+        _clock = new MengaClock();
+        _clock.set_frequency(frequency);
+        _buzzer = new MengaLED(pin);
+        _buzzer.set(initial_value);
+    }
+    void update() {
+        if (_clock.tick()) {_buzzer.off(); _buzzer.on();}
+    }
+    void set_frequency(int frequency) {_clock.set_frequency(frequency);}
+    void stop() {_clock.stop();}
+    void resume() {_clock.resume();}
 };
