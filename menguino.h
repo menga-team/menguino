@@ -121,7 +121,9 @@ public:
         return false;
     }
     void set(int interval) {_interval = interval;}
-    void restart() {_last_tick = millis();}
+    void set_interval(int interval) {set(interval);}
+    void set_frequency(int frequency) {_interval = 1000/frequency;}
     void stop() {_run = false;}
     void resume() {_run = true;}
+    void restart() {_last_tick = millis();}
 };
