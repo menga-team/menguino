@@ -108,12 +108,13 @@ class MengaClock {
 private:
     int _interval;
     unsigned long _last_tick = 0;
+    bool _run = true;
 public:
     MengaClock(int interval = 500) {
         _interval = interval;
     }
     bool tick() {
-        if (millis() > _last_tick + _interval) {
+        if (_run && millis() > _last_tick + _interval) {
             _last_tick = millis();
             return true;
         }
@@ -121,4 +122,6 @@ public:
     }
     void set(int interval) {_interval = interval;}
     void restart() {_last_tick = millis();}
+    void stop() {_run = false;}
+    void resume() {_run = true;}
 };
