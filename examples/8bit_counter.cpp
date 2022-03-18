@@ -2,7 +2,7 @@
 
 MengaClock clock;
 int length = 8;
-MengaLED leds[8] = {PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB&, PB8};
+MengaLED leds[8] = {PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8};
 
 byte led_value(byte ledindex, byte value) {
     return ((value >> ledindex) & 1);
