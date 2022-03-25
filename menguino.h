@@ -128,6 +128,8 @@ public:
     void restart() {_last_tick = millis();}
 };
 
+// TODO: fix this
+/*
 class MengaBuzzer {
 private:
     MengaClock _clock;
@@ -146,3 +148,4 @@ public:
     void stop() {_clock.stop();}
     void resume() {_clock.resume();}
 };
+ */
