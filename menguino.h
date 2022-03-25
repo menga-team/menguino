@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 // datatypes
-using byte = uint_t;
+using byte = uint8_t;
 
 // cool power function
 int power(int x, unsigned int p) {
