@@ -27,12 +27,9 @@ using byte = uint8_t;
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
 
 // constants
-#define baud 9600
+#define BAUD 9600
 
-/*
-extern bool _menguino_serial;
-extern void _menguino_init_serial();
-*/
+void serial_init();
 
 //bool _menguino_debug = false;
 //void debug_init() {_menguino_debug = true;}
