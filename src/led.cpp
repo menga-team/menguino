@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "../include/menguino.h"
 
 void MengaLED::write() {
@@ -10,7 +11,7 @@ MengaLED::MengaLED(byte pin, byte initial_value, bool high_side) {
     _value = initial_value;
     _high_side = high_side;
     pm(_pin, OUTPUT);
-    Serial.println("mengaled loaded"); // asdasdashdjhaskjdhaskjdhkjashd
+    //dbprint("MengaLED::MengaLED() -> mengaled loaded");
 }
 void MengaLED::on() {_value = 1; write();}
 void MengaLED::off() {_value = 0; write();}

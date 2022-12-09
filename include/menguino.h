@@ -1,4 +1,8 @@
+#ifndef MENGUINO_H
+#define MENGUINO_H
+
 #include <Arduino.h>
+#include <stdint.h>
 
 // datatypes
 using byte = uint8_t;
@@ -21,7 +25,18 @@ using byte = uint8_t;
 #define menga_pinmap(pin, min, max) map(analogRead(pin), 0, ar_res-1, min, max)
 #define menga_pwm(in, out) aw(out, menga_pinmap(in, 0, 255))
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
-#define print(message) Serial.println(message)
+
+// constants
+#define baud 9600
+
+/*
+extern bool _menguino_serial;
+extern void _menguino_init_serial();
+*/
+
+//bool _menguino_debug = false;
+//void debug_init() {_menguino_debug = true;}
+//void dbprint(char* message) {if (_menguino_debug) {_menguino_init_serial(); Serial.println(message);}}
 
 class MengaLED {
 private:
@@ -83,3 +98,15 @@ public:
     void stop();
     void resume();
 };
+
+class MengaSerial {
+private:
+    byte* _id_value;
+    byte* _id_value_reversed;
+    byte _id_length;
+public:
+    MengaSerial(byte id_length = 2, byte* id_value = nullptr);
+    void send(char* message);
+};
+
+#endif

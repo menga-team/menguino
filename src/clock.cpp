@@ -1,4 +1,6 @@
+#include <Arduino.h>
 #include "../include/menguino.h"
+
 
 MengaClock::MengaClock(int interval) {
     _last_tick = 0;

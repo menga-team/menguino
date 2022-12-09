@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "../include/menguino.h"
 
 bool MengaButton::_debounce_update(byte value) {
@@ -33,7 +34,7 @@ bool MengaButton::update() {
             _last_millis = millis();
             triggered =  _debounce_update(value);
         }
-        else Serial.println("unwanted");
+        // else dbprint("MengaButton::update() -> unwanted");
         _last_value = value;
     }
     return triggered;
