@@ -26,8 +26,9 @@ using byte = uint8_t;
 #define menga_pwm(in, out) aw(out, menga_pinmap(in, 0, 255))
 #define menga_pwm_inverse(in, out) aw(out, menga_pinmap(in, 255, 0))
 
-// constants
-#define BAUD 9600
+// flags
+#define EVENTBASED 0
+#define BUFFERBASED 1
 
 void serial_init();
 
@@ -98,12 +99,31 @@ public:
 
 class MengaSerial {
 private:
+    int _baud;
     byte* _id_value;
     byte* _id_value_reversed;
     byte _id_length;
+    byte _mode;
 public:
-    MengaSerial(byte id_length = 2, byte* id_value = nullptr);
+    /// create serial interface, providing baud and identifier
+    MengaSerial(int baud = 9600, byte id_length = 2, byte* id_value = nullptr);
+
+    /// initialize serial communication and select mode
+    void init(byte mode = EVENTBASED);
+
+    /// send null-terminated char array pre- and suffixed with identifier
     void send(char* message);
+
+    /// in event mode, set function triggered by message
+    void create_event(*char message, std::function<void()>);
+
+    /// in buffer mode, true if message(s) are available to read
+    bool available();
+
+    /// in buffer mode, returns null-terminated char array of the oldest message in buffer
+    char* read();
+
+    ~MengaSerial();
 };
 
 #endif

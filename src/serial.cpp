@@ -2,9 +2,8 @@
 #include "../include/menguino.h"
 #include <string.h>
 
-void serial_init() { Serial.begin(BAUD); while (!Serial) ;}
-
-MengaSerial::MengaSerial(byte id_length, byte* id_value) {
+MengaSerial::MengaSerial(int baud, byte id_length, byte* id_value) {
+    _baud = baud;
     _id_length = id_length;
     if (_id_length > 8) {
         _id_length = 8;
@@ -32,3 +31,23 @@ void MengaSerial::send(char *message) {
     Serial.write(_id_value_reversed, _id_length);
 }
 
+void MengaSerial::init(byte mode) {
+    _mode = mode;
+    Serial.begin(_baud);
+    while (!Serial);
+}
+
+void MengaSerial::create_event(*char message, std::function<void()>) {
+    if (_mode != EVENTBASED) return;
+    // WIP
+}
+
+bool MengaSerial::available() {
+    if (_mode != BUFFERBASED) return;
+    // WIP
+}
+
+void MengaSerial::read() {
+    if (_mode != BUFFERBASED) return;
+    // WIP
+}

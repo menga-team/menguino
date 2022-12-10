@@ -65,4 +65,8 @@ suffixed with an id can be sent and received [todo] to avoid misinterpretations 
 communication gets interrupted or starts in the middle of a message.
 
 ### MengaSerial
-- `void send(char* message)` sends a null-terminated char array
+- `void init(byte mode)` initialize serial communication and select mode
+- `void send(char* message)` send null-terminated char array pre- and suffixed with identifier
+- `void create_event(*char message, std::function<void()>)` in event mode, set function triggered by message
+- `bool available()` in buffer mode, true if message(s) are available to read
+- `char* read()` in buffer mode, returns null-terminated char array of the oldest message in buffer
